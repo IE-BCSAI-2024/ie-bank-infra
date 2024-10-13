@@ -6,19 +6,19 @@
             "value": "nonprod"
         },
         "postgreSQLServerName": {
-            "value": "didi-dbsrv-dev"
+            "value": "didi-dbsrv-uat"
         },
         "postgreSQLDatabaseName": {
-            "value": "didi-db-dev"
+            "value": "didi-db-uat"
         },
         "appServicePlanName": {
-            "value": "didi-asp-dev"
+            "value": "didi-asp-uat"
         },
         "appServiceAPIAppName": {
-            "value": "didi-be-dev"
+            "value": "didi-be-uat"
         },
         "appServiceAppName": {
-            "value": "didi-fe-dev"
+            "value": "didi-fe-uat"
         },
         "location": {
             "value": "North Europe"
