@@ -1,0 +1,27 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "environmentType": {
+            "value": "nonprod"
+        },
+        "postgreSQLServerName": {
+            "value": "Mat-dbsrv-uat"
+        },
+        "postgreSQLDatabaseName": {
+            "value": "Mat-db-uat"
+        },
+        "appServicePlanName": {
+            "value": "Mat-asp-uat"
+        },
+        "appServiceAPIAppName": {
+            "value": "Mat-be-uat"
+        },
+        "appServiceAppName": {
+            "value": "Mat-fe-uat"
+        },
+        "location": {
+            "value": "North Europe"
+        }
+    }
+  }
