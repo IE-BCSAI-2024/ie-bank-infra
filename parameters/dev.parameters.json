@@ -6,19 +6,19 @@
             "value": "nonprod"
         },
         "postgreSQLServerName": {
-            "value": "jseijas-dbsrv-dev"
+            "value": "kelectriciteh-dbsrv-dev"
         },
         "postgreSQLDatabaseName": {
-            "value": "jseijas-db-dev"
+            "value": "kelectriciteh-db-dev"
         },
         "appServicePlanName": {
-            "value": "jseijas-asp-dev"
+            "value": "kelectriciteh-asp-dev"
         },
         "appServiceAPIAppName": {
-            "value": "jseijas-be-dev"
+            "value": "kelectriciteh-be-dev"
         },
         "appServiceAppName": {
-            "value": "jseijas-fe-dev"
+            "value": "kelectriciteh-fe-dev"
         },
         "location": {
             "value": "North Europe"
