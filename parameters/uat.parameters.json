@@ -6,19 +6,19 @@
             "value": "nonprod"
         },
         "postgreSQLServerName": {
-            "value": "talineshawwa-dbsrv-dev"
+            "value": "talineshawwa-dbsrv-uat"
         },
         "postgreSQLDatabaseName": {
-            "value": "talineshawwa-db-dev"
+            "value": "talineshawwa-db-uat"
         },
         "appServicePlanName": {
-            "value": "talineshawwa-asp-dev"
+            "value": "talineshawwa-asp-uat"
         },
         "appServiceAPIAppName": {
-            "value": "talineshawwa-be-dev"
+            "value": "talineshawwa-be-uat"
         },
         "appServiceAppName": {
-            "value": "talineshawwa-fe-dev"
+            "value": "talineshawwa-fe-uat"
         },
         "location": {
             "value": "North Europe"
