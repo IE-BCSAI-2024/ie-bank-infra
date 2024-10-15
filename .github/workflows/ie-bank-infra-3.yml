@@ -26,6 +26,12 @@ jobs:
     - name: Run Bicep linter
       run: az bicep build --file ./main.bicep
 
+    - name: Upload Bicep build artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: bicep-build
+        path: ./main.bicep
+
   deploy-dev:
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
