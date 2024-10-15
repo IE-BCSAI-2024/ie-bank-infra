@@ -6,19 +6,19 @@
             "value": "nonprod"
         },
         "postgreSQLServerName": {
-            "value": "troca-dbsrv-dev"
+            "value": "troca-dbsrv-uat"
         },
         "postgreSQLDatabaseName": {
-            "value": "troca-db-dev"
+            "value": "troca-db-uat"
         },
         "appServicePlanName": {
             "value": "troca-asp-dev"
         },
         "appServiceAPIAppName": {
-            "value": "troca-be-dev"
+            "value": "troca-be-uat"
         },
         "appServiceAppName": {
-            "value": "troca-fe-dev"
+            "value": "troca-fe-uat"
         },
         "location": {
             "value": "North Europe"
