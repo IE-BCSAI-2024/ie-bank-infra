@@ -6,19 +6,19 @@
             "value": "nonprod"
         },
         "postgreSQLServerName": {
-            "value": "sbrenner-dbsrv-dev"
+            "value": "sbrenner-dbsrv-uat"
         },
         "postgreSQLDatabaseName": {
-            "value": "sbrenner-db-dev"
+            "value": "sbrenner-db-uat"
         },
         "appServicePlanName": {
-            "value": "sbrenner-asp-dev"
+            "value": "sbrenner-asp-uat"
         },
         "appServiceAPIAppName": {
-            "value": "sbrenner-be-dev"
+            "value": "sbrenner-be-uat"
         },
         "appServiceAppName": {
-            "value": "sbrenner-fe-dev"
+            "value": "sbrenner-fe-uat"
         },
         "location": {
             "value": "North Europe"

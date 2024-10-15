@@ -14,7 +14,7 @@ param appServiceAPIDBHostFLASK_DEBUG string
   'nonprod'
   'prod'
 ])
-param environmentType string
+param environmentType string //hey
 
 var appServicePlanSkuName = (environmentType == 'prod') ? 'B1' : 'B1' //modify according to desired capacity
 
