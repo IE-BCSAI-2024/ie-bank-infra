@@ -1,0 +1,379 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.30.23.60470",
+      "templateHash": "12990183453098033960"
+    }
+  },
+  "parameters": {
+    "environmentType": {
+      "type": "string",
+      "defaultValue": "nonprod",
+      "allowedValues": [
+        "nonprod",
+        "prod"
+      ],
+      "metadata": {
+        "description": "The environment type (nonprod or prod)"
+      }
+    },
+    "postgreSQLServerName": {
+      "type": "string",
+      "defaultValue": "ie-bank-db-server-dev",
+      "minLength": 3,
+      "maxLength": 24,
+      "metadata": {
+        "description": "The PostgreSQL Server name"
+      }
+    },
+    "postgreSQLDatabaseName": {
+      "type": "string",
+      "defaultValue": "ie-bank-db",
+      "minLength": 3,
+      "maxLength": 24,
+      "metadata": {
+        "description": "The PostgreSQL Database name"
+      }
+    },
+    "appServicePlanName": {
+      "type": "string",
+      "defaultValue": "ie-bank-app-sp-dev",
+      "minLength": 3,
+      "maxLength": 24,
+      "metadata": {
+        "description": "The App Service Plan name"
+      }
+    },
+    "appServiceAppName": {
+      "type": "string",
+      "defaultValue": "ie-bank-dev",
+      "minLength": 3,
+      "maxLength": 24,
+      "metadata": {
+        "description": "The Web App name (frontend)"
+      }
+    },
+    "appServiceAPIAppName": {
+      "type": "string",
+      "defaultValue": "ie-bank-api-dev",
+      "minLength": 3,
+      "maxLength": 24,
+      "metadata": {
+        "description": "The API App name (backend)"
+      }
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "The Azure location where the resources will be deployed"
+      }
+    },
+    "appServiceAPIEnvVarENV": {
+      "type": "string",
+      "metadata": {
+        "description": "The value for the environment variable ENV"
+      }
+    },
+    "appServiceAPIEnvVarDBHOST": {
+      "type": "string",
+      "metadata": {
+        "description": "The value for the environment variable DBHOST"
+      }
+    },
+    "appServiceAPIEnvVarDBNAME": {
+      "type": "string",
+      "metadata": {
+        "description": "The value for the environment variable DBNAME"
+      }
+    },
+    "appServiceAPIEnvVarDBPASS": {
+      "type": "securestring",
+      "metadata": {
+        "description": "The value for the environment variable DBPASS"
+      }
+    },
+    "appServiceAPIDBHostDBUSER": {
+      "type": "string",
+      "metadata": {
+        "description": "The value for the environment variable DBUSER"
+      }
+    },
+    "appServiceAPIDBHostFLASK_APP": {
+      "type": "string",
+      "metadata": {
+        "description": "The value for the environment variable FLASK_APP"
+      }
+    },
+    "appServiceAPIDBHostFLASK_DEBUG": {
+      "type": "string",
+      "metadata": {
+        "description": "The value for the environment variable FLASK_DEBUG"
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.DBforPostgreSQL/flexibleServers/firewallRules",
+      "apiVersion": "2022-12-01",
+      "name": "[format('{0}/{1}', parameters('postgreSQLServerName'), 'AllowAllAzureServicesAndResourcesWithinAzureIps')]",
+      "properties": {
+        "endIpAddress": "0.0.0.0",
+        "startIpAddress": "0.0.0.0"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('postgreSQLServerName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.DBforPostgreSQL/flexibleServers",
+      "apiVersion": "2022-12-01",
+      "name": "[parameters('postgreSQLServerName')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "Standard_B1ms",
+        "tier": "Burstable"
+      },
+      "properties": {
+        "administratorLogin": "iebankdbadmin",
+        "administratorLoginPassword": "IE.Bank.DB.Admin.Pa$$",
+        "createMode": "Default",
+        "highAvailability": {
+          "mode": "Disabled",
+          "standbyAvailabilityZone": ""
+        },
+        "storage": {
+          "storageSizeGB": 32
+        },
+        "backup": {
+          "backupRetentionDays": 7,
+          "geoRedundantBackup": "Disabled"
+        },
+        "version": "15"
+      }
+    },
+    {
+      "type": "Microsoft.DBforPostgreSQL/flexibleServers/databases",
+      "apiVersion": "2022-12-01",
+      "name": "[format('{0}/{1}', parameters('postgreSQLServerName'), parameters('postgreSQLDatabaseName'))]",
+      "properties": {
+        "charset": "UTF8",
+        "collation": "en_US.UTF8"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('postgreSQLServerName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2022-09-01",
+      "name": "appService",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "environmentType": {
+            "value": "[parameters('environmentType')]"
+          },
+          "appServiceAppName": {
+            "value": "[parameters('appServiceAppName')]"
+          },
+          "appServiceAPIAppName": {
+            "value": "[parameters('appServiceAPIAppName')]"
+          },
+          "appServicePlanName": {
+            "value": "[parameters('appServicePlanName')]"
+          },
+          "appServiceAPIDBHostDBUSER": {
+            "value": "[parameters('appServiceAPIDBHostDBUSER')]"
+          },
+          "appServiceAPIDBHostFLASK_APP": {
+            "value": "[parameters('appServiceAPIDBHostFLASK_APP')]"
+          },
+          "appServiceAPIDBHostFLASK_DEBUG": {
+            "value": "[parameters('appServiceAPIDBHostFLASK_DEBUG')]"
+          },
+          "appServiceAPIEnvVarDBHOST": {
+            "value": "[parameters('appServiceAPIEnvVarDBHOST')]"
+          },
+          "appServiceAPIEnvVarDBNAME": {
+            "value": "[parameters('appServiceAPIEnvVarDBNAME')]"
+          },
+          "appServiceAPIEnvVarDBPASS": {
+            "value": "[parameters('appServiceAPIEnvVarDBPASS')]"
+          },
+          "appServiceAPIEnvVarENV": {
+            "value": "[parameters('appServiceAPIEnvVarENV')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.30.23.60470",
+              "templateHash": "7889023226994193413"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string",
+              "defaultValue": "[resourceGroup().location]"
+            },
+            "appServicePlanName": {
+              "type": "string"
+            },
+            "appServiceAppName": {
+              "type": "string"
+            },
+            "appServiceAPIAppName": {
+              "type": "string"
+            },
+            "appServiceAPIEnvVarENV": {
+              "type": "string"
+            },
+            "appServiceAPIEnvVarDBHOST": {
+              "type": "string"
+            },
+            "appServiceAPIEnvVarDBNAME": {
+              "type": "string"
+            },
+            "appServiceAPIEnvVarDBPASS": {
+              "type": "securestring"
+            },
+            "appServiceAPIDBHostDBUSER": {
+              "type": "string"
+            },
+            "appServiceAPIDBHostFLASK_APP": {
+              "type": "string"
+            },
+            "appServiceAPIDBHostFLASK_DEBUG": {
+              "type": "string"
+            },
+            "environmentType": {
+              "type": "string",
+              "allowedValues": [
+                "nonprod",
+                "prod"
+              ]
+            }
+          },
+          "variables": {
+            "appServicePlanSkuName": "[if(equals(parameters('environmentType'), 'prod'), 'B1', 'B1')]"
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Web/serverfarms",
+              "apiVersion": "2022-03-01",
+              "name": "[parameters('appServicePlanName')]",
+              "location": "[parameters('location')]",
+              "sku": {
+                "name": "[variables('appServicePlanSkuName')]"
+              },
+              "kind": "linux",
+              "properties": {
+                "reserved": true
+              }
+            },
+            {
+              "type": "Microsoft.Web/sites",
+              "apiVersion": "2022-03-01",
+              "name": "[parameters('appServiceAPIAppName')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]",
+                "httpsOnly": true,
+                "siteConfig": {
+                  "linuxFxVersion": "PYTHON|3.11",
+                  "alwaysOn": false,
+                  "ftpsState": "FtpsOnly",
+                  "appSettings": [
+                    {
+                      "name": "ENV",
+                      "value": "[parameters('appServiceAPIEnvVarENV')]"
+                    },
+                    {
+                      "name": "DBHOST",
+                      "value": "[parameters('appServiceAPIEnvVarDBHOST')]"
+                    },
+                    {
+                      "name": "DBNAME",
+                      "value": "[parameters('appServiceAPIEnvVarDBNAME')]"
+                    },
+                    {
+                      "name": "DBPASS",
+                      "value": "[parameters('appServiceAPIEnvVarDBPASS')]"
+                    },
+                    {
+                      "name": "DBUSER",
+                      "value": "[parameters('appServiceAPIDBHostDBUSER')]"
+                    },
+                    {
+                      "name": "FLASK_APP",
+                      "value": "[parameters('appServiceAPIDBHostFLASK_APP')]"
+                    },
+                    {
+                      "name": "FLASK_DEBUG",
+                      "value": "[parameters('appServiceAPIDBHostFLASK_DEBUG')]"
+                    },
+                    {
+                      "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",
+                      "value": "true"
+                    }
+                  ]
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Web/sites",
+              "apiVersion": "2022-03-01",
+              "name": "[parameters('appServiceAppName')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]",
+                "httpsOnly": true,
+                "siteConfig": {
+                  "linuxFxVersion": "NODE|18-lts",
+                  "alwaysOn": false,
+                  "ftpsState": "FtpsOnly",
+                  "appCommandLine": "pm2 serve /home/site/wwwroot --spa --no-daemon",
+                  "appSettings": []
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]"
+              ]
+            }
+          ],
+          "outputs": {
+            "appServiceAppHostName": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.Web/sites', parameters('appServiceAppName')), '2022-03-01').defaultHostName]"
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers/databases', parameters('postgreSQLServerName'), parameters('postgreSQLDatabaseName'))]"
+      ]
+    }
+  ],
+  "outputs": {
+    "appServiceAppHostName": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', 'appService'), '2022-09-01').outputs.appServiceAppHostName.value]"
+    }
+  }
+}

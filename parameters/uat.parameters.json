@@ -6,19 +6,19 @@
             "value": "nonprod"
         },
         "postgreSQLServerName": {
-            "value": "makiwarner2-dbsrv-dev"
+            "value": "makiwarner-dbsrv-uat"
         },
         "postgreSQLDatabaseName": {
-            "value": "makiwarner2-db-dev"
+            "value": "makiwarner-db-uat"
         },
         "appServicePlanName": {
-            "value": "makiwarner2-asp-dev"
+            "value": "makiwarner-asp-uat"
         },
         "appServiceAPIAppName": {
-            "value": "makiwarner2-be-dev"
+            "value": "makiwarner-be-uat"
         },
         "appServiceAppName": {
-            "value": "makiwarner2-fe-dev"
+            "value": "makiwarner-fe-uat"
         },
         "location": {
             "value": "North Europe"
