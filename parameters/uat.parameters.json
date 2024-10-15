@@ -1,0 +1,27 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "environmentType": {
+            "value": "nonprod"
+        },
+        "postgreSQLServerName": {
+            "value": "kelectriciteh-dbsrv-uat"
+        },
+        "postgreSQLDatabaseName": {
+            "value": "kelectriciteh-db-uat"
+        },
+        "appServicePlanName": {
+            "value": "kelectriciteh-asp-uat"
+        },
+        "appServiceAPIAppName": {
+            "value": "kelectriciteh-be-uat"
+        },
+        "appServiceAppName": {
+            "value": "kelectriciteh-fe-uat"
+        },
+        "location": {
+            "value": "North Europe"
+        }
+    }
+}
